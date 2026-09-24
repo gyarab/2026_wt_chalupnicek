@@ -1,0 +1,23 @@
+from <https://github.com/gyarab/2026_wt_rezac>
+
+# Margaret Hamilton
+
+Margaret Hamilton (* 17. srpna 1936 Paoli) je americká softwarová inženýrka a podnikatelka. Byla ředitelkou oddělení softwarového inženýrství v MIT Instrumentation Laboratory, která vyvíjela letový software pro Program Apollo. V roce 1986 založila společnost Hamilton Technologies, která sídlí ve městě Cambridge ve státě Massachusetts. Za svůj život vydala okolo 130 článků, zpráv a různých dokumentů. V roce 2016 získala Prezidentskou medaili svobody, kterou jí udělil prezident USA Barack Obama.
+
+* V roce 1954 vystudovala Hancock High School a roku 1958 získala akademický titul na Earlham College.
+* Když jí bylo 24 let, získala práci v Massachusettském technologickém institutu.
+* V první polovině 60. let 20. století pracovala na programu protiletadlové obrany s názvem SAGE.
+* Zůstala v institutu, aby pracovala pro NASA, kde byla odpovědná pro vývoj navigačního softwaru potřebného pro let na Měsíc a přistání na Měsíci.
+ 
+Margaret Hamilton [online]. Wikipedie: Otevřená encyklopedie, [cit. 2026-09-23]. Dostupné z: [odkaz - Margaret Hamilton](https://cs.wikipedia.org/wiki/Margaret_Hamilton)
+
+| Základní údaj | Informace |
+| --- | --- |
+| **Celé jméno** | Margaret Heafield Hamilton |
+| **Datum narození** | 17. srpna 1936 |
+| **Místo narození** | Paoli, Indiana, USA |
+| **Povolání** | Softwarová inženýrka, podnikatelka |
+| **Hlavní zásluha** | Vývoj letového softwaru pro Program Apollo (NASA) |
+| **Ocenění** | Prezidentská medaile svobody (2016) |
+
+![obrazek](https://news.mit.edu/sites/default/files/styles/news_article__image_gallery/public/images/201611/margaret-hamilton-1989.jpeg?itok=qZbGL5Rl)
