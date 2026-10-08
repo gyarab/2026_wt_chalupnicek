@@ -1,13 +1,13 @@
 
 2026_wt_antonin
 2026_wt_babec
-2026-wt-barta
+2026_wt_barta
 2026_wt_dolezel
 2026_wt_glatzel
 2026_wt_hebelka
 2026_wt_hyan
 2026_wt_chladek
-2026-wt-jezl-jaroslav
+2026_wt_jezl
 2026_wt_klicpera
 2026_wt_kout
 2026_wt_kruta

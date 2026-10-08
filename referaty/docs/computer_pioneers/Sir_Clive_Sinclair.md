@@ -1,4 +1,4 @@
-from <https://github.com/gyarab/2026-wt-jezl-jaroslav>
+from <https://github.com/gyarab/2026_wt_jezl>
 
 # Sir Clive Sinclair
 

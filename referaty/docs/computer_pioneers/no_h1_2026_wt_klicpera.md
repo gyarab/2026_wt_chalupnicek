@@ -1,6 +1,6 @@
 from <https://github.com/gyarab/2026_wt_klicpera>
 
-John von Neumann
+# John von Neumann
 
 John von Neumann (1903–1957) byl maďarsko-americký matematik, fyzik a jeden z nejvýznamnějších vědců 20. století. Už od dětství měl mimořádné matematické schopnosti a dokázal si třeba zapamatovat dlouhé telefonní seznamy. Později studoval v Budapešti, Berlíně a Zurichu a už v mladém věku publikoval odborné práce.
 

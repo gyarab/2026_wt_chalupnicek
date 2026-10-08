@@ -1,4 +1,4 @@
-from <https://github.com/gyarab/2026-wt-barta>
+from <https://github.com/gyarab/2026_wt_barta>
 
 # Markus Persson
 **Markus Persson** je švédský programátor v jazyce C++ a Java. Založil společnost Mojang Studios, která vyvíjí jednu z nejprodávanějších her na světě - *Minecraft*.
@@ -17,3 +17,4 @@ Zdroje:
 - https://cs.wikipedia.org/wiki/Markus_Persson
 - https://en.wikipedia.org/wiki/Markus_Persson
 - https://en.wikipedia.org/wiki/Mojang_Studios
+___

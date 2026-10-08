@@ -1,6 +1,6 @@
 from <https://github.com/gyarab/2026_wt_micienka>
 
-# Steve Wilhite: Tvůrce formátu GIF
+# Steve Wilhite
 
 Steve Wilhite byl americký počítačový vědec a programátor, který se zapsal do historie internetu především jako hlavní autor grafického formátu GIF. Tento formát vyvinul v roce 1987 během svého působení ve společnosti CompuServe, kde bylo potřeba vytvořit efektivní způsob, jak přenášet barevné obrázky přes tehdejší velmi pomalé sítě.
 

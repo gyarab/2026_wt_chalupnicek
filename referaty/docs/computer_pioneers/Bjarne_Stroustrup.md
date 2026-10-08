@@ -1,6 +1,6 @@
 from <https://github.com/gyarab/2026_wt_chladek>
 
-# **Referat on Bjarne Stroustrup**  
+# **Bjarne Stroustrup**  
 
 ![foto of Bjarne Stroustrup from wiki](pictures/Bjarne_Stroustrup_(2013).jpg)
 
