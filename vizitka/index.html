@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: lightgray;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .wrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* position: relative; */
+        }
+        .vizitka {
+            background-color: beige;
+            width: 300px;
+            border-radius: 10px;
+            padding: 20px;
+            /* position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -50%;
+            margin-top: -50%; */
+
+        }
+        .profile-img {
+            width: 50px;
+            vertical-align: middle;
+        }
+        button {
+            padding: 20px 40px;
+            color:azure;
+            border-radius: 5px;
+            border: 0;
+            background: linear-gradient(45deg, blue, red) ;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="vizitka">
+            <h1>
+                Ing. Václav Chalupníček
+                <img class="profile-img" src="./profilovka.jpg" alt="obličej Chalupníček">
+            </h1>
+            <p>Učitel na gymnáziu Arabská. Softwarový inženýr a lezec.</p>
+            <p>Co mám rád:</p>
+            <ul>
+                <li>Počítače</li>
+                <li>Jídlo</li>
+                <li>Skály</li>
+            </ul>
+            <button onclick="kontakt();">Kontaktujte mě</button>
+        </div>
+    </div>
+</body>
+<script>
+    function kontakt() {
+        alert('Nepište mi e-mail, nemám to rád.')
+    }
+</script>
+</html>
