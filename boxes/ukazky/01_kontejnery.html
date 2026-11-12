@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="cs" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01 – Kontejnery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <style>
+        .krabice { border: 2px dashed tomato; padding: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="position-fixed bottom-0 end-0 m-3 badge theme-inverse fs-md">
+        <span class="sm:d-none">XS &lt; 576</span>
+        <span class="d-none sm:d-inline md:d-none">SM ≥ 576</span>
+        <span class="d-none md:d-inline lg:d-none">MD ≥ 768</span>
+        <span class="d-none lg:d-inline xl:d-none">LG ≥ 1024</span>
+        <span class="d-none xl:d-inline 2xl:d-none">XL ≥ 1280</span>
+        <span class="d-none 2xl:d-inline">2XL ≥ 1536</span>
+    </div>
+
+    <h1 class="text-center my-5">Kontejnery</h1>
+
+    <!-- 1) BEZ kontejneru: text se lepí na okraj okna -->
+    <div class="krabice mb-5">
+        Bez kontejneru – nalepené na okraj okna.
+    </div>
+
+    <!-- 2) .container: pevná max. šířka, která skáče po breakpointech -->
+    <div class="container mb-5">
+        <div class="krabice">
+            <code>.container</code> – šířka se mění skokově podle breakpointu
+            (sm 540 / md 720 / lg 960 / xl 1200 / 2xl 1440 px).
+        </div>
+    </div>
+
+    <!-- 3) .container-fluid: vždy 100 % šířky (jen s odsazením po stranách) -->
+    <div class="container-fluid mb-5">
+        <div class="krabice">
+            <code>.container-fluid</code> – vždy 100 % šířky okna.
+        </div>
+    </div>
+
+    <!-- 4) md:container: do md je fluid, od md se chová jako .container -->
+    <div class="md:container mb-5">
+        <div class="krabice">
+            <code>.md:container</code> – na mobilu na celou šířku, od 768 px jako <code>.container</code>.
+        </div>
+    </div>
+
+    <!-- Typické použití: barevný pruh přes celou šířku, obsah uvnitř zarovnaný -->
+    <div class="container-fluid bg-primary fg-white py-12 text-center">
+        <div class="container">
+            <h2>Pruh přes celou šířku</h2>
+            <p class="mb-0">… ale text uvnitř drží šířku <code class="fg-white">.container</code></p>
+        </div>
+    </div>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
+</body>
+</html>

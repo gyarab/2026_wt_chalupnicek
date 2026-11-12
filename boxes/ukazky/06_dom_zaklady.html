@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="cs" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06 – Krabice v JavaScriptu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <style>
+        /* jedna krabice = tlačítko (dá se na něj kliknout i klávesnicí) */
+        .box {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border: 0;
+            border-radius: 1rem;
+            font-size: 2.5rem;
+            background: #8d99ae;   /* zavřená krabice */
+            cursor: pointer;
+        }
+        .box .obsah {
+            visibility: hidden;     /* obsah je schovaný */
+        }
+        /* třídu .otevrena přidává/odebírá JavaScript */
+        .box.otevrena {
+            background: #ffd166;
+        }
+        .box.otevrena .obsah {
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-8">
+        <h1>Co je v krabici?</h1>
+        <p>Ukázka základů pro domácí úkol: vytvoření prvků z pole, kliknutí, <code>classList</code>, počítadlo.</p>
+
+        <p class="fs-lg">
+            Otevřeno: <strong id="pocet">0</strong>
+            <button id="zamichat" class="btn-solid theme-primary ms-3">Zamíchat</button>
+            <button id="zavrit" class="btn-outline theme-secondary ms-1">Zavřít vše</button>
+        </p>
+
+        <!-- sem JavaScript vloží krabice -->
+        <div id="plocha" class="row row-cols-3 md:row-cols-4 lg:row-cols-6 g-3"></div>
+    </div>
+
+    <script>
+        // 1) DATA – co je v krabicích
+        const veci = ['🍎', '🎸', '⚽', '🐱', '🚲', '🎧', '📚', '🍕', '🎮', '🌵', '🦆', '🧸'];
+
+        // 2) PRVKY ze stránky
+        const plocha = document.querySelector('#plocha');
+        const pocetEl = document.querySelector('#pocet');
+
+        // 3) STAV
+        let pocetOtevrenych = 0;
+
+        function zamichej(pole) {
+            // Fisher–Yates: projdeme pole odzadu a prohodíme s náhodným prvkem
+            for (let i = pole.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pole[i], pole[j]] = [pole[j], pole[i]];
+            }
+            return pole;
+        }
+
+        function vykresli() {
+            plocha.innerHTML = '';               // smažeme staré krabice
+            pocetOtevrenych = 0;
+            pocetEl.textContent = pocetOtevrenych;
+
+            for (const vec of veci) {
+                // <div class="col"><button class="box"><span class="obsah">🍎</span></button></div>
+                const col = document.createElement('div');
+                col.classList.add('col');
+
+                const box = document.createElement('button');
+                box.classList.add('box');
+                box.dataset.vec = vec;           // uložíme si hodnotu do data-vec="..."
+                box.innerHTML = `<span class="obsah">${vec}</span>`;
+
+                box.addEventListener('click', () => {
+                    box.classList.toggle('otevrena');
+                    // contains = "má prvek tuhle třídu?"
+                    if (box.classList.contains('otevrena')) {
+                        pocetOtevrenych++;
+                        console.log('otevřel jsi', box.dataset.vec);
+                    } else {
+                        pocetOtevrenych--;
+                    }
+                    pocetEl.textContent = pocetOtevrenych;
+                });
+
+                col.appendChild(box);
+                plocha.appendChild(col);
+            }
+        }
+
+        document.querySelector('#zamichat').addEventListener('click', () => {
+            zamichej(veci);
+            vykresli();
+        });
+
+        document.querySelector('#zavrit').addEventListener('click', () => {
+            // querySelectorAll vrátí VŠECHNY prvky – projdeme je cyklem
+            document.querySelectorAll('.box').forEach((b) => b.classList.remove('otevrena'));
+            pocetOtevrenych = 0;
+            pocetEl.textContent = pocetOtevrenych;
+        });
+
+        vykresli();
+    </script>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
+</body>
+</html>
