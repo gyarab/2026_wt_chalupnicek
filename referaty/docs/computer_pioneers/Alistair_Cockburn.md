@@ -1,8 +1,5 @@
 from <https://github.com/gyarab/2026_wt_dolezel>
 
-Repository not found: 2026_wt_dolezel
-
-
 # Alistair Cockburn
 
 Alistair Cockburn (příjmení se čte přibližně „koubern“) je americký informatik a jeden z hlavních průkopníků agilního přístupu k vývoji softwaru. Informatiku vystudoval na Case Western Reserve University a v roce 2003 získal doktorát na Univerzitě v Oslu s prací *People and Methodologies in Software Development*, ve které zkoumal, jak lidé a jejich spolupráce ovlivňují úspěch softwarových projektů. Na začátku kariéry se pro firmu IBM věnoval metodikám objektově orientovaného vývoje, od roku 1994 působí jako nezávislý konzultant se svou firmou Humans and Technology v Salt Lake City. Nejvíce se proslavil tím, že v roce 2001 zorganizoval setkání v lyžařském středisku Snowbird v Utahu, kde spolu s dalšími šestnácti odborníky sepsal **Manifest agilního vývoje softwaru**. Ten zásadně změnil způsob, jakým se dnes software vyvíjí, a jeho myšlenky se rozšířily i do řízení projektů mimo IT.
