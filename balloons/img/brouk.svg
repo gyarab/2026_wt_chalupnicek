@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- brouk (pohled shora, hlava nahoře) -->
+  <g stroke="#1b4d47" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M45 14 L38 4 M55 14 L62 4"/>
+    <path d="M32 38 L18 30 L12 34 M27 56 L10 56 M30 74 L16 86 L16 92"/>
+    <path d="M68 38 L82 30 L88 34 M73 56 L90 56 M70 74 L84 86 L84 92"/>
+  </g>
+  <path d="M44 14 Q40 8 44 6 M56 14 Q60 8 56 6" stroke="#1b4d47" stroke-width="3" fill="none"/>
+  <circle cx="50" cy="18" r="9" fill="#1d6f66"/>
+  <ellipse cx="50" cy="31" rx="18" ry="9" fill="#21867a"/>
+  <ellipse cx="50" cy="62" rx="26" ry="30" fill="#2a9d8f"/>
+  <line x1="50" y1="34" x2="50" y2="92" stroke="#1b4d47" stroke-width="3"/>
+  <ellipse cx="38" cy="54" rx="5" ry="14" fill="#fff" fill-opacity=".3" transform="rotate(12 38 54)"/>
+  <ellipse cx="62" cy="54" rx="3" ry="10" fill="#fff" fill-opacity=".18" transform="rotate(-12 62 54)"/>
+</svg>

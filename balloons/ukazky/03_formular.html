@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="cs" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03 – Formulář a validace</title>
+
+    <!-- Bootstrap 6 (alpha) – CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+
+    <style>
+        /* ===== HRACÍ PLOCHA = obloha ===== */
+        .plocha {
+            position: relative;      /* „balónky“ se umisťují vůči ploše */
+            height: 60vh;
+            min-height: 320px;
+            overflow: hidden;        /* co vyletí ven, není vidět */
+            background: linear-gradient(#8ecae6, #e0f4ff);
+            user-select: none;
+        }
+        .plocha-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: 1rem;
+            margin: 0;
+            text-align: center;
+            font-size: 1.25rem;
+            color: #335;
+        }
+
+        /* ===== JEDEN „BALÓNEK“ – zatím barevný čtverec s kulatými rohy ===== */
+        .balonek {
+            position: absolute;      /* JS nastaví left a top v % */
+            translate: -50% -50%;    /* left/top = STŘED čtverce */
+            width: 3.5rem;
+            height: 3.5rem;
+            padding: 0;
+            border: 0;
+            border-radius: .75rem;
+            background-color: tomato;     /* JS nastaví náhodnou barvu */
+            cursor: pointer;
+        }
+        /* volitelně: místo barvy obrázek (img/beruska.svg …) */
+        .balonek.obrazek {
+            background-color: transparent;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HLAVIČKA ===== -->
+    <nav class="navbar bg-1">
+        <div class="container">
+            <span class="navbar-brand fw-bold">🎈 Balloons</span>
+        </div>
+    </nav>
+
+    <main class="container py-8">
+        <div class="row g-5">
+
+            <!-- ===== NASTAVENÍ (mobil: nahoře, od LG: vlevo, 4/12) ===== -->
+            <aside class="col-12 lg:col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="h5 mb-5">Nastavení hry</h2>
+
+                        <!-- novalidate = vypne bubliny prohlížeče, data-bs-validate = chyby ukáže Bootstrap -->
+                        <form id="nastaveni" class="d-flex flex-column gap-5" novalidate data-bs-validate>
+                            <div class="form-field">
+                                <label for="jmeno" class="form-label">Jméno hráče</label>
+                                <input type="text" id="jmeno" class="form-control" placeholder="např. Pepa"
+                                       required minlength="2" maxlength="20">
+                                <div class="invalid-feedback">Napiš jméno, aspoň 2 znaky.</div>
+                            </div>
+
+                            <!-- dvě pole vedle sebe: od SM, ale v úzkém sloupci od LG zase pod sebou -->
+                            <div class="row g-5">
+                                <div class="col-12 sm:col-6 lg:col-12 form-field">
+                                    <label for="pocet" class="form-label">Počet</label>
+                                    <input type="number" id="pocet" class="form-control" value="10"
+                                           required min="1" max="50">
+                                    <div class="invalid-feedback">Celé číslo od 1 do 50.</div>
+                                </div>
+                                <div class="col-12 sm:col-6 lg:col-12 form-field">
+                                    <label for="vzhled" class="form-label">Vzhled</label>
+                                    <select id="vzhled" class="form-control">
+                                        <option value="barvy">Barevné čtverce</option>
+                                        <option value="brouci">Brouci 🐞</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-field">
+                                <div class="switch">
+                                    <input type="checkbox" id="zvuk" role="switch" checked>
+                                </div>
+                                <label for="zvuk">Zvuk 🔊</label>
+                            </div>
+
+                            <button type="submit" class="btn-solid theme-primary w-100">Start 🎈</button>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ===== HRA (mobil: dole, od LG: vpravo, 8/12) ===== -->
+            <section class="col-12 lg:col-8">
+                <div class="d-flex flex-wrap gap-3 mb-5">
+                    <span class="badge theme-secondary fs-md">Hráč: <span id="hrac">?</span></span>
+                    <span class="badge theme-primary fs-md">Prasknuto: <span id="prasknuto">0</span> / <span id="celkem">0</span></span>
+                </div>
+
+                <div id="zprava" class="alert theme-success d-none"></div>
+
+                <div id="plocha" class="plocha rounded-4 shadow">
+                    <p class="plocha-text">
+                        <span class="lg:d-none">👆</span><span class="d-none lg:d-inline">👈</span>
+                        <span>Nastav hru a klikni na Start</span>
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="py-8 text-center fg-3">Balloons · úvod do JavaScriptu</footer>
+
+    <script>
+        console.log('Balloons: JavaScript běží!');
+
+        // ===== 1) PRVKY ZE STRÁNKY =====
+        const plocha = document.querySelector('#plocha');
+        const prasknutoEl = document.querySelector('#prasknuto');
+        const celkemEl = document.querySelector('#celkem');
+        const zpravaEl = document.querySelector('#zprava');
+        const hracEl = document.querySelector('#hrac');
+        const formular = document.querySelector('#nastaveni');
+
+        // ===== 2) STAV HRY =====
+        let prasknuto = 0;      // kolik balónků už hráč praskl
+        let celkem = 0;         // kolik balónků je ve hře
+        let start = 0;          // kdy hra začala (ms)
+        let vzhled = 'barvy';   // 'barvy' = barevné čtverce, 'brouci' = obrázky hmyzu
+        const BROUCI = ['beruska', 'vcela', 'mravenec', 'moucha', 'brouk'];   // soubory v img/
+
+        // ===== 3) FUNKCE =====
+
+        // náhodné celé číslo od min do max (včetně obou)
+        function nahodne(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // přepíše čísla v odznáčku „Prasknuto: 3 / 10“
+        function ukazStav() {
+            prasknutoEl.textContent = prasknuto;
+            celkemEl.textContent = celkem;
+        }
+
+        function vytvorBalonek() {
+            const balonek = document.createElement('button');
+            balonek.classList.add('balonek');
+            balonek.style.left = nahodne(10, 90) + '%';
+            balonek.style.top = nahodne(15, 80) + '%';
+            if (vzhled === 'brouci') {
+                balonek.classList.add('obrazek');
+                balonek.style.backgroundImage = `url('../img/${BROUCI[nahodne(0, 4)]}.svg')`;
+                balonek.style.rotate = nahodne(0, 359) + 'deg';      // každý brouk natočený jinak
+            } else {
+                balonek.style.backgroundColor = `hsl(${nahodne(0, 359)} 80% 55%)`;
+            }
+
+            // co se stane po kliknutí na TENTO balónek
+            balonek.addEventListener('click', () => {
+                balonek.remove();
+                prasknuto++;
+                ukazStav();
+                if (prasknuto === celkem) {
+                    konecHry();
+                }
+            });
+
+            plocha.appendChild(balonek);
+        }
+
+        function novaHra(pocet) {
+            plocha.innerHTML = '';
+            prasknuto = 0;
+            celkem = pocet;
+            zpravaEl.classList.add('d-none');
+            for (let i = 0; i < pocet; i++) {
+                vytvorBalonek();
+            }
+            ukazStav();
+            start = Date.now();
+        }
+
+        function konecHry() {
+            const sekundy = ((Date.now() - start) / 1000).toFixed(1);
+            zpravaEl.textContent = `🎉 Hotovo! Všechny balónky (${celkem}) za ${sekundy} s.`;
+            zpravaEl.classList.remove('d-none');
+        }
+
+        // ===== 4) UDÁLOSTI =====
+
+        // odeslání formuláře (tlačítko Start nebo Enter)
+        formular.addEventListener('submit', (udalost) => {
+            udalost.preventDefault();               // NEposílat formulář = nenačítat stránku znovu
+
+            if (!formular.checkValidity()) {        // je něco špatně vyplněné?
+                console.log('Formulář není v pořádku');
+                return;                             // Bootstrap sám ukáže chyby, hru nespouštíme
+            }
+
+            const jmeno = document.querySelector('#jmeno').value;
+            const pocet = Number(document.querySelector('#pocet').value);   // value je TEXT → převést na číslo
+            vzhled = document.querySelector('#vzhled').value;
+            hracEl.textContent = jmeno;
+            novaHra(pocet);
+        });
+
+    </script>
+
+    <!-- Bootstrap 6 – JS (je to ES modul => type="module") -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
+</body>
+</html>

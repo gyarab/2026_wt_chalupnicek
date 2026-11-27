@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- moucha (pohled shora, hlava nahoře) -->
+  <g stroke="#222" stroke-width="3" stroke-linecap="round" fill="none">
+    <path d="M38 44 L22 38 M37 54 L20 58 M40 64 L26 76"/>
+    <path d="M62 44 L78 38 M63 54 L80 58 M60 64 L74 76"/>
+  </g>
+  <ellipse cx="50" cy="60" rx="14" ry="25" fill="#4a4e57"/>
+  <g stroke="#7b818c" stroke-width="3"><path d="M38 60 H62 M39 70 H61 M42 79 H58"/></g>
+  <ellipse cx="35" cy="66" rx="11" ry="25" fill="#e3ebf2" fill-opacity=".85" stroke="#8a99a8" stroke-width="2" transform="rotate(25 35 66)"/>
+  <ellipse cx="65" cy="66" rx="11" ry="25" fill="#e3ebf2" fill-opacity=".85" stroke="#8a99a8" stroke-width="2" transform="rotate(-25 65 66)"/>
+  <ellipse cx="50" cy="38" rx="12" ry="9" fill="#3a3d44"/>
+  <circle cx="50" cy="25" r="10" fill="#3a3d44"/>
+  <circle cx="42" cy="22" r="7" fill="#c1121f"/>
+  <circle cx="58" cy="22" r="7" fill="#c1121f"/>
+  <circle cx="40" cy="20" r="2" fill="#fff" fill-opacity=".7"/>
+  <circle cx="56" cy="20" r="2" fill="#fff" fill-opacity=".7"/>
+</svg>

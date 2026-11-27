@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- včela (pohled shora, hlava nahoře) -->
+  <defs>
+    <clipPath id="telo"><ellipse cx="50" cy="60" rx="19" ry="27"/></clipPath>
+  </defs>
+  <g stroke="#222" stroke-width="3.5" stroke-linecap="round" fill="none">
+    <path d="M45 18 Q40 8 34 6 M55 18 Q60 8 66 6"/>
+    <path d="M33 50 L20 46 M32 62 L18 66 M35 74 L24 84"/>
+    <path d="M67 50 L80 46 M68 62 L82 66 M65 74 L76 84"/>
+  </g>
+  <ellipse cx="50" cy="60" rx="19" ry="27" fill="#ffc300"/>
+  <g clip-path="url(#telo)" fill="#222">
+    <rect x="25" y="52" width="50" height="7"/>
+    <rect x="25" y="65" width="50" height="7"/>
+    <rect x="25" y="78" width="50" height="7"/>
+  </g>
+  <path d="M46 86 L54 86 L50 96 Z" fill="#222"/>
+  <ellipse cx="31" cy="42" rx="18" ry="10" fill="#d6ecff" fill-opacity=".9" stroke="#6b9cc2" stroke-width="2" transform="rotate(-30 31 42)"/>
+  <ellipse cx="69" cy="42" rx="18" ry="10" fill="#d6ecff" fill-opacity=".9" stroke="#6b9cc2" stroke-width="2" transform="rotate(30 69 42)"/>
+  <circle cx="50" cy="26" r="11" fill="#222"/>
+  <circle cx="45" cy="23" r="2.5" fill="#fff"/>
+  <circle cx="55" cy="23" r="2.5" fill="#fff"/>
+</svg>
