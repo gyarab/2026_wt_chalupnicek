@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="cs" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04 – Balloons se všemi bonusy</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+
+    <style>
+        /* ===== HRACÍ PLOCHA = obloha ===== */
+        .plocha {
+            position: relative;
+            height: 60vh;
+            min-height: 320px;
+            overflow: hidden;
+            background: linear-gradient(#8ecae6, #e0f4ff);
+            user-select: none;
+            touch-action: manipulation;   /* rychlé ťukání na mobilu bez zoomu */
+        }
+        .plocha.konec {
+            filter: grayscale(.7);
+        }
+        .plocha-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: 1rem;
+            margin: 0;
+            text-align: center;
+            font-size: 1.25rem;
+            color: #335;
+        }
+
+        /* ===== JEDEN BALÓNEK: čtverec ze šablony, tvar balónku dodá ../balonek.css ===== */
+        .balonek {
+            position: absolute;
+            translate: -50% -50%;
+            width: 3.5rem;
+            height: 3.5rem;
+            padding: 0;
+            border: 0;
+            border-radius: .75rem;
+            background-color: tomato;
+            cursor: pointer;
+            font-size: 1.5rem;
+            /* BONUS: houpání – rotace kolem bodu pod balónkem */
+            transform-origin: 50% 130%;
+            animation: houpani 1.4s ease-in-out infinite alternate;
+        }
+        .balonek.obrazek {
+            background-color: transparent;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: none;              /* brouci se nehoupou, jen jsou natočení */
+            transform-origin: center;
+        }
+
+        /* BONUS: bomba */
+        .balonek.bomba {
+            background-color: #2b2d42;
+        }
+
+        /* BONUS: animace prasknutí (balónek) a plácnutí (brouk) */
+        .balonek.prask {
+            animation: prask .6s ease-out forwards;
+            pointer-events: none;
+        }
+        .balonek.obrazek.prask {
+            animation: placnuti .6s ease-out forwards;
+        }
+
+        @keyframes houpani {
+            from { rotate: -6deg; }
+            to   { rotate: 6deg; }
+        }
+        @keyframes prask {
+            40%  { scale: 1.4; opacity: 1; }     /* nafouknout */
+            100% { scale: 2; opacity: 0; }       /* prasknout a zmizet */
+        }
+        @keyframes placnuti {
+            25%  { scale: 1.4 .3; opacity: 1; }  /* rozplácnout */
+            70%  { scale: 1.5 .25; opacity: 1; } /* chvíli zůstane ležet */
+            100% { scale: 1.5 .25; opacity: 0; } /* a zmizí */
+        }
+    </style>
+    <!-- pěkné balónky (z čtverců udělá balónky s provázkem) -->
+    <link rel="stylesheet" href="../balonek.css">
+</head>
+<body>
+
+    <nav class="navbar bg-1">
+        <div class="container">
+            <span class="navbar-brand fw-bold">🎈 Balloons</span>
+        </div>
+    </nav>
+
+    <main class="container py-8">
+        <div class="row g-5">
+
+            <!-- ===== NASTAVENÍ ===== -->
+            <aside class="col-12 lg:col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="h5 mb-5">Nastavení hry</h2>
+
+                        <form id="nastaveni" class="d-flex flex-column gap-5" novalidate data-bs-validate>
+                            <div class="form-field">
+                                <label for="jmeno" class="form-label">Jméno hráče</label>
+                                <input type="text" id="jmeno" class="form-control" placeholder="např. Pepa"
+                                       required minlength="2" maxlength="20">
+                                <div class="invalid-feedback">Napiš jméno, aspoň 2 znaky.</div>
+                            </div>
+
+                            <div class="row g-3 align-items-start">
+                                <div class="col-6 form-field">
+                                    <label for="pocet" class="form-label">Balónků</label>
+                                    <input type="number" id="pocet" class="form-control" value="10"
+                                           required min="1" max="50">
+                                    <div class="invalid-feedback">1 až 50.</div>
+                                </div>
+                                <div class="col-6 form-field">
+                                    <label for="bomby" class="form-label">Bomb 💣</label>
+                                    <input type="number" id="bomby" class="form-control" value="0"
+                                           required min="0" max="10">
+                                    <div class="invalid-feedback">0 až 10 a méně než balónků.</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-5 align-items-start">
+                                <div class="col-12 sm:col-6 lg:col-12 form-field">
+                                    <label for="vzhled" class="form-label">Vzhled</label>
+                                    <select id="vzhled" class="form-control">
+                                        <option value="barvy">Balónky 🎈</option>
+                                        <option value="brouci">Brouci 🐞 (smash a bug)</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 sm:col-6 lg:col-12 form-field">
+                                    <label for="pohyb" class="form-label">Pohyb</label>
+                                    <select id="pohyb" class="form-control" required>
+                                        <option value="">Vyber…</option>
+                                        <option value="klid">Stojí na místě</option>
+                                        <option value="primka">Stoupají rovně nahoru</option>
+                                        <option value="sinus">Stoupají ve vlnovce</option>
+                                    </select>
+                                    <div class="invalid-feedback">Vyber, jak se mají hýbat.</div>
+                                </div>
+                            </div>
+
+                            <fieldset class="d-flex flex-column gap-2">
+                                <legend class="form-label fs-md">Režim</legend>
+                                <div class="form-field">
+                                    <input type="radio" class="radio" name="rezim" id="rezim-klasika" value="klasika" checked>
+                                    <label for="rezim-klasika">Klasika: prasknout všechny co nejrychleji</label>
+                                </div>
+                                <div class="form-field">
+                                    <input type="radio" class="radio" name="rezim" id="rezim-cas" value="na-cas">
+                                    <label for="rezim-cas">Na čas: co nejvíc za 20 s</label>
+                                </div>
+                            </fieldset>
+
+                            <div class="form-field">
+                                <div class="switch">
+                                    <input type="checkbox" id="zvuk" role="switch" checked>
+                                </div>
+                                <label for="zvuk">Zvuk 🔊</label>
+                            </div>
+
+                            <button type="submit" class="btn-solid theme-primary w-100">Start 🎈</button>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ===== HRA ===== -->
+            <section class="col-12 lg:col-8">
+                <div class="d-flex flex-wrap gap-3 mb-5">
+                    <span class="badge theme-secondary fs-md">Hráč: <span id="hrac">?</span></span>
+                    <span class="badge theme-primary fs-md">Prasknuto: <span id="skore">0</span></span>
+                    <span class="badge theme-info fs-md">⏱ <span id="cas">0.0</span> s</span>
+                    <span class="badge theme-warning fs-md">🏆 Rekord na čas: <span id="rekord">–</span></span>
+                </div>
+
+                <div id="zprava" class="alert theme-success d-none"></div>
+
+                <div id="plocha" class="plocha rounded-4 shadow">
+                    <p class="plocha-text">
+                        <span class="lg:d-none">👆</span><span class="d-none lg:d-inline">👈</span>
+                        <span>Nastav hru a klikni na Start</span>
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="py-8 text-center fg-3">Balloons · úvod do JavaScriptu</footer>
+
+    <script>
+        // ===== 1) PRVKY ZE STRÁNKY =====
+        const plocha = document.querySelector('#plocha');
+        const formular = document.querySelector('#nastaveni');
+        const poleJmeno = document.querySelector('#jmeno');
+        const polePocet = document.querySelector('#pocet');
+        const poleBomby = document.querySelector('#bomby');
+        const polePohyb = document.querySelector('#pohyb');
+        const poleVzhled = document.querySelector('#vzhled');
+        const poleZvuk = document.querySelector('#zvuk');
+        const hracEl = document.querySelector('#hrac');
+        const skoreEl = document.querySelector('#skore');
+        const casEl = document.querySelector('#cas');
+        const rekordEl = document.querySelector('#rekord');
+        const zpravaEl = document.querySelector('#zprava');
+
+        // ===== 2) STAV HRY =====
+        const LIMIT = 20;           // délka hry „na čas“ v sekundách
+        let balonky = [];           // objekty { el, x, y, rychlost, faze, bomba }
+        let prasknuto = 0;
+        let celkem = 0;
+        let pohyb = 'klid';         // 'klid' | 'primka' | 'sinus'
+        let rezim = 'klasika';      // 'klasika' | 'na-cas'
+        let vzhled = 'barvy';       // 'barvy' | 'brouci'
+        const BROUCI = ['beruska', 'vcela', 'mravenec', 'moucha', 'brouk'];   // soubory v ../img/
+        let hraBezi = false;
+        let start = 0;
+
+        // ===== 3) FUNKCE =====
+
+        function nahodne(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function vytvorBalonek(bomba) {
+            const el = document.createElement('button');
+            el.type = 'button';
+            el.classList.add('balonek');
+            if (bomba) {
+                el.classList.add('bomba');
+                el.textContent = '💣';
+            } else if (vzhled === 'brouci') {
+                el.classList.add('obrazek');
+                el.style.backgroundImage = `url('../img/${BROUCI[nahodne(0, 4)]}.svg')`;
+                if (pohyb === 'klid') {
+                    el.style.rotate = nahodne(0, 359) + 'deg';   // sedící brouk natočený kamkoli
+                }                                                // letící brouk míří hlavou nahoru
+            } else {
+                el.style.backgroundColor = `hsl(${nahodne(0, 359)} 80% 55%)`;
+            }
+            // každý balónek se houpe jinak (záporné zpoždění = animace už „běží“)
+            el.style.animationDelay = -nahodne(0, 1400) + 'ms';
+
+            const b = {
+                el: el,
+                x: nahodne(12, 88),
+                y: nahodne(15, 80),
+                rychlost: nahodne(10, 25),         // o kolik % výšky plochy za sekundu
+                faze: Math.random() * 2 * Math.PI, // posun vlnovky, ať nejsou všechny stejně
+                bomba: bomba,
+            };
+            if (pohyb !== 'klid') {
+                b.y = nahodne(105, 160);           // začínají pod plochou a postupně vyletí
+            }
+
+            el.addEventListener('click', () => prasknout(b));
+            balonky.push(b);
+            plocha.appendChild(el);
+            umisti(b);
+        }
+
+        // přepočítá x/y objektu na CSS left/top
+        function umisti(b) {
+            let x = b.x;
+            if (pohyb === 'sinus') {
+                x = b.x + 6 * Math.sin(b.y / 6 + b.faze);
+            }
+            b.el.style.left = x + '%';
+            b.el.style.top = b.y + '%';
+        }
+
+        function prasknout(b) {
+            if (!hraBezi) return;
+
+            if (poleZvuk.checked) {
+                new Audio('../zvuky/pop.wav').play();
+            }
+
+            // vyřadit z pole (už se nehýbe) a po animaci smazat z HTML
+            balonky = balonky.filter((jiny) => jiny !== b);
+            b.el.style.animationDelay = '0s';      // zrušit náhodné zpoždění z houpání, jinak by animace začala „v půlce“
+            b.el.classList.add('prask');
+            setTimeout(() => b.el.remove(), 600);
+
+            if (b.bomba) {
+                konecHry(false, `💥 Bum! ${hracEl.textContent} trefil(a) bombu.`);
+                return;
+            }
+
+            prasknuto++;
+            ukazStav();
+
+            if (rezim === 'na-cas') {
+                vytvorBalonek(false);              // místo prasklého hned nový
+            } else if (prasknuto === celkem) {
+                konecHry(true, `🎉 Hotovo! Všechny balónky (${celkem}) za ${ubehlo().toFixed(1)} s.`);
+            }
+        }
+
+        function ubehlo() {
+            return (performance.now() - start) / 1000;
+        }
+
+        function ukazStav() {
+            if (rezim === 'na-cas') {
+                skoreEl.textContent = prasknuto;
+            } else {
+                skoreEl.textContent = `${prasknuto} / ${celkem}`;
+            }
+        }
+
+        function ukazRekord() {
+            rekordEl.textContent = localStorage.getItem('balloons-rekord') ?? '–';
+        }
+
+        function novaHra() {
+            pohyb = polePohyb.value;
+            vzhled = poleVzhled.value;
+            rezim = document.querySelector('input[name="rezim"]:checked').value;
+            celkem = Number(polePocet.value);
+            const pocetBomb = Number(poleBomby.value);
+
+            plocha.innerHTML = '';
+            plocha.classList.remove('konec');
+            zpravaEl.classList.add('d-none');
+            balonky = [];
+            prasknuto = 0;
+
+            for (let i = 0; i < celkem; i++) {
+                vytvorBalonek(false);
+            }
+            for (let i = 0; i < pocetBomb; i++) {
+                vytvorBalonek(true);
+            }
+
+            ukazStav();
+            start = performance.now();
+            hraBezi = true;
+        }
+
+        function konecHry(vyhra, text) {
+            hraBezi = false;
+            plocha.classList.add('konec');
+
+            if (rezim === 'na-cas' && vyhra) {
+                const rekord = Number(localStorage.getItem('balloons-rekord') ?? 0);
+                if (prasknuto > rekord) {
+                    localStorage.setItem('balloons-rekord', prasknuto);
+                    text += ' Nový rekord! 🏆';
+                    ukazRekord();
+                }
+            }
+
+            zpravaEl.textContent = text;
+            zpravaEl.classList.remove('d-none', 'theme-success', 'theme-danger');
+            zpravaEl.classList.add(vyhra ? 'theme-success' : 'theme-danger');
+        }
+
+        // herní smyčka: prohlížeč ji volá před každým snímkem (60× i 144× za sekundu)
+        let posledni = 0;
+        function krok(ted) {
+            // kolik sekund uběhlo od minulého snímku (max 0.1 s, kdyby byla karta na pozadí)
+            const dt = Math.min((ted - posledni) / 1000, 0.1);
+            posledni = ted;
+
+            if (hraBezi) {
+                if (pohyb !== 'klid') {
+                    for (const b of balonky) {
+                        b.y -= b.rychlost * dt;        // nahoru = menší top
+                        if (b.y < -15) {               // uletěl → znovu zespodu
+                            b.y = 115;
+                            b.x = nahodne(12, 88);
+                        }
+                        umisti(b);
+                    }
+                }
+
+                if (rezim === 'na-cas') {
+                    const zbyva = Math.max(0, LIMIT - ubehlo());
+                    casEl.textContent = zbyva.toFixed(1);
+                    if (zbyva === 0) {
+                        konecHry(true, `⏰ Čas vypršel! ${hracEl.textContent} má skóre ${prasknuto}.`);
+                    }
+                } else {
+                    casEl.textContent = ubehlo().toFixed(1);
+                }
+            }
+            requestAnimationFrame(krok);
+        }
+
+        // vlastní pravidlo, které HTML atributy neumí: bomb musí být méně než balónků
+        function zkontrolujBomby() {
+            if (Number(poleBomby.value) >= Number(polePocet.value)) {
+                poleBomby.setCustomValidity('Bomb musí být méně než balónků.');
+            } else {
+                poleBomby.setCustomValidity('');   // prázdný text = v pořádku
+            }
+        }
+
+        // ===== 4) UDÁLOSTI =====
+
+        polePocet.addEventListener('input', zkontrolujBomby);
+        poleBomby.addEventListener('input', zkontrolujBomby);
+
+        formular.addEventListener('submit', (udalost) => {
+            udalost.preventDefault();
+            zkontrolujBomby();
+            if (!formular.checkValidity()) {
+                return;
+            }
+            hracEl.textContent = poleJmeno.value;
+            novaHra();
+        });
+
+        ukazRekord();
+        requestAnimationFrame(krok);
+    </script>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
+</body>
+</html>
